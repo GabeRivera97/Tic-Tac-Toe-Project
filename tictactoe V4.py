@@ -1,6 +1,7 @@
 import time, random
 
-def intro():
+#A function that displays a blank board
+def displayInitialBoard():
     initialBoard = [
         [' ',' ',' ','a',' ',' ',' ',' ',' ','b',' ',' ',' ',' ',' ','c',' ',' '],
         [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' '],
@@ -12,15 +13,18 @@ def intro():
         [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' '],
         ['3',' ',' ','-',' ',' ','|',' ',' ','-',' ',' ','|',' ',' ','-',' ',' '],
         [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ']]
+    for line in initialBoard:
+            print(*line, sep = '')
 
+#The introductory sequence for whenever the game is first ran
+def intro():
     print("""
 =======================
 Welcome to Tic Tac Toe!
 =======================
     """)
     time.sleep(1.5)
-    for line in initialBoard:
-            print(*line, sep = '')
+    displayInitialBoard()
     time.sleep(0.5)
     print("""
 TUTORIAL:
@@ -32,9 +36,9 @@ with your icon, either a row, a columnm or diagonally.
 the icon 'X' and mine will be the icon 'O'
     """)
     time.sleep(1)
-    
-def main():
 
+#The main game of Tic Tac Toe
+def main():
     #Dictionary which tracks the status of moves
     #made to the gameboard, and prevents overwriting
     #previous moves
@@ -46,9 +50,22 @@ def main():
     playerIcon = 'X'
     computerIcon = 'O'
 
+    #The loop used to restart the game if the player wants,
+    #or exit the program if they are done playing
+    def restart_loop():
+        restart = str.lower(str.strip(input('\nWould you like to play again? (yes/no) ')))
+        if restart in ("yes","y"):
+            print('')
+            displayInitialBoard()
+            main()
+        elif restart in ("no","n"):
+            exit()
+        else:
+            print("\nPlease answer with either yes/no or y/n.")
+            restart_loop()
+
     #Prints the board using dictionary
     #keys to refrence the status of each grid
-
     def printTheBoard():
         gameBoard=[
         [' ',' ',' ','a',' ',' ',' ',' ',' ','b',' ',' ',' ',' ',' ','c',' ',' '],
@@ -68,7 +85,6 @@ def main():
     #Asks the player for their move,
     #which is then cleaned and passed
     #through the dictionary of board values
-
     def playerMove():
         playerChoice = str.lower(str.strip((input('\nWhat is your move? '))))
         if (playerChoice,'-') in previousMoves.items():
@@ -84,7 +100,6 @@ def main():
     #The cumputer makes a random move using a list of keys
     #from the dictionary of board values, which is then
     #passed through the dictionary
-            
     def computerMove():
         computerChoice = random.choice(list(previousMoves.keys()))
         if (computerChoice,'-') in previousMoves.items():
@@ -97,7 +112,6 @@ def main():
     #The primary gameplay loop, which continuously passes the turn
     #between the player and the computer, and checks if any of the possible
     #win conditions have been met, or the board is full
-            
     def gamePlayLoop():
         for turnCount in range(1, 11):
 
@@ -123,6 +137,7 @@ def main():
             elif turnCount % 2 == 0:
                 computerMove()
     gamePlayLoop()
+    restart_loop()
 
 intro()
 main()
