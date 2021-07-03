@@ -6,8 +6,8 @@ more about the language. I plan to add features including a difficulty setting, 
 using .txt files. I'm always excited to learn more efficient ways to implement the features of my code, so please feel 
 free to give any suggestions on anything that was written amateurishly.
 
------------
+------
 UPDATE LOG:
------------
+------
 Ver 1.02, Leaderboard Update:
 The game will now create a save file wherever it is saved on your computer which stores game statistics for each game played by the username chosen by the player.
