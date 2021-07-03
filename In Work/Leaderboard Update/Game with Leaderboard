@@ -2,40 +2,6 @@ import time, random
 
 userName = None
 
-#A function that displays a blank board
-def displayInitialBoard():
-    initialBoard = [
-        [' ',' ',' ','a',' ',' ',' ',' ',' ','b',' ',' ',' ',' ',' ','c',' ',' '],
-        [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' '],
-        ['1',' ',' ','-',' ',' ','|',' ',' ','-',' ',' ','|',' ',' ','-',' ',' '],
-        [' ','_','_','_','_','_','|','_','_','_','_','_','|','_','_','_','_','_'],
-        [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' '],
-        ['2',' ',' ','-',' ',' ','|',' ',' ','-',' ',' ','|',' ',' ','-',' ',' '],
-        [' ','_','_','_','_','_','|','_','_','_','_','_','|','_','_','_','_','_'],
-        [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' '],
-        ['3',' ',' ','-',' ',' ','|',' ',' ','-',' ',' ','|',' ',' ','-',' ',' '],
-        [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ']]
-    for line in initialBoard:
-            print(*line, sep = '')
-
-#######################################################################################################################
-
-def displayLeaderboard():
-    saveFileDoc = open(r"C:\Users\gjriv\Downloads\Python\My Codes\Text files\TicTacToeSaveFiles.txt" , "r+")
-    fileLines = saveFileDoc.read()
-    textList = fileLines.split()
-    print("Displaying gameplay statistics for " + userName + ":")
-    print("Wins = " + str(textList[textList.index(userName) + 1]))
-    print("Losses = " + str(textList[textList.index(userName) + 2]))
-    print("Ties = " + str(textList[textList.index(userName) + 3]))
-    try:
-        print("Win/Loss Ratio = " + str(int(textList[textList.index(userName) + 1]) / int(textList[textList.index(userName) + 2])))
-        saveFileDoc.close()
-    except ZeroDivisionError:
-        print("Win/Loss Ratio = " + str(float(textList[textList.index(userName) + 1])) + " (You have never lost a game)")
-
-#######################################################################################################################
-
 #The introductory sequence for whenever the game is first ran
 def intro():
     print("""
@@ -54,31 +20,78 @@ TUTORIAL:
     """)
     time.sleep(1)
     global userName
-    userName = str.capitalize(str.strip(input('what is your name? ')))
+    userName = str.capitalize(str.strip(input('Enter your username (or make a new one): ')))
     usernameCheck(userName)
 
-#######################################################################################################################
-
+#Checks the username passed to it from the intro function.
+#Creates a new save file if the username hasnt been used or edits
+#the players stats if they have played before. Also allows the user to
+#access their stats or play the game
 def usernameCheck(name):
-    saveFileDoc = open(r"C:\Users\gjriv\Downloads\Python\My Codes\Text files\TicTacToeSaveFiles.txt" , "r+")
+    try:
+        saveFileDoc = open("TicTacToeSaveFiles.txt" , "r+")
+        fileLines = saveFileDoc.read()
+        textList = fileLines.split()
+        if userName in textList:
+            choiceReturn = str.lower(str.strip(input('Welcome back, ' +  userName + ", to view the your stats type 'L', to play type 'P' ")))
+            if choiceReturn == 'p':
+                main()
+            elif choiceReturn == 'l':
+                displayLeaderboard()
+        elif userName not in textList:
+            saveFileDoc.write(userName + ' 0 0 0 ')
+            saveFileDoc.close()
+            choiceNew = str.lower(str.strip(input('Hello ' + userName + ", it looks like you haven't played before. I've created a save file for you. To play type 'P', to exit type 'E'.")))
+            if choiceNew == 'p':
+                main()
+            elif choiceNew == 'e':
+                exit()
+    except FileNotFoundError:
+        
+        open("TicTacToeSaveFiles.txt" , "w")
+        usernameCheck(userName)
+
+#Pulls stats from the text file containing usernames,
+#and displays the sats of the player
+def displayLeaderboard():
+    saveFileDoc = open("TicTacToeSaveFiles.txt" , "r+")
     fileLines = saveFileDoc.read()
     textList = fileLines.split()
-    if userName in textList:
-        choice = str.lower(str.strip(input('Welcome back, ' +  userName + ", to view the your stats type 'L', to play type 'P' ")))
-        if choice == 'p':
-            main()
-        elif choice == 'l':
-            displayLeaderboard()
-    elif userName not in textList:
-        saveFileDoc.write(' ' + userName + ' 0 0 0')
+    print("Displaying gameplay statistics for " + userName + ":")
+    print("Wins = " + str(textList[textList.index(userName) + 1]))
+    print("Losses = " + str(textList[textList.index(userName) + 2]))
+    print("Ties = " + str(textList[textList.index(userName) + 3]))
+    try:
+        print("Win/Loss Ratio = " + str(int(textList[textList.index(userName) + 1]) / int(textList[textList.index(userName) + 2])))
         saveFileDoc.close()
-        str.lower(str.strip(input('Hello ' + userName + ", it looks like you haven't played before. I've created a save file for you. To play type 'P', to exit type 'E'.")))
-        if choice == 'p':
-            main()
-        elif choice == 'e':
+    except ZeroDivisionError:
+        print("Win/Loss Ratio = " + str(float(textList[textList.index(userName) + 1])) + " (You have never lost a game)")
+    def afterStats():
+        restart = str.lower(str.strip(input('\nReturn to main menu? (yes/no) ')))
+        if restart in ("yes","y"):
+            intro()
+        elif restart in ("no","n"):
             exit()
+        else:
+            print("\nPlease answer with either yes/no or y/n.")
+            afterStats()
+    afterStats()
 
-#######################################################################################################################
+#Displays a blank board
+def displayInitialBoard():
+    initialBoard = [
+        [' ',' ',' ','a',' ',' ',' ',' ',' ','b',' ',' ',' ',' ',' ','c',' ',' '],
+        [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' '],
+        ['1',' ',' ','-',' ',' ','|',' ',' ','-',' ',' ','|',' ',' ','-',' ',' '],
+        [' ','_','_','_','_','_','|','_','_','_','_','_','|','_','_','_','_','_'],
+        [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' '],
+        ['2',' ',' ','-',' ',' ','|',' ',' ','-',' ',' ','|',' ',' ','-',' ',' '],
+        [' ','_','_','_','_','_','|','_','_','_','_','_','|','_','_','_','_','_'],
+        [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' '],
+        ['3',' ',' ','-',' ',' ','|',' ',' ','-',' ',' ','|',' ',' ','-',' ',' '],
+        [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ']]
+    for line in initialBoard:
+            print(*line, sep = '')
 
 
 #The main game of Tic Tac Toe
@@ -104,6 +117,8 @@ def main():
             main()
         elif restart in ("no","n"):
             exit()
+        elif restart in("mainmenu"):
+            intro()
         else:
             print("\nPlease answer with either yes/no or y/n.")
             restart_loop()
@@ -153,23 +168,6 @@ def main():
         else:
             computerMove()
 
-
-
-#######################################################################################################################
-
-    def leaderboardUpdate(winner):
-        saveFileDoc = open(r"C:\Users\gjriv\Downloads\Python\My Codes\Text files\TicTacToeSaveFiles.txt" , "r+")
-        fileLines = saveFileDoc.read()
-        textList = fileLines.split()
-        textList[textList.index(userName) + winner] = str(int(textList[textList.index(userName) + winner]) + 1)
-        newSave = ' '.join(textList)
-        saveFileDoc.seek(0)
-        saveFileDoc.write(newSave)
-        saveFileDoc.close()
-
-#######################################################################################################################
-
-        
     #The primary gameplay loop, which continuously passes the turn
     #between the player and the computer, and checks if any of the possible
     #win conditions have been met, or the board is full
@@ -200,6 +198,18 @@ def main():
                 playerMove()
             elif turnCount % 2 == 0:
                 computerMove()
+
+    #Updates the stats associated with the players username after the game is over
+    def leaderboardUpdate(winner):
+        saveFileDoc = open("TicTacToeSaveFiles.txt" , "r+")
+        fileLines = saveFileDoc.read()
+        textList = fileLines.split()
+        textList[textList.index(userName) + winner] = str(int(textList[textList.index(userName) + winner]) + 1)
+        newSave = ' '.join(textList)
+        saveFileDoc.seek(0)
+        saveFileDoc.write(newSave)
+        saveFileDoc.close()
+        
     gamePlayLoop()
     restart_loop()
 
