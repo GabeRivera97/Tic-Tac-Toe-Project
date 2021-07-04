@@ -74,7 +74,7 @@ def displayLeaderboard():
     print("Losses = " + str(textList[textList.index(userName) + 2]))
     print("Ties = " + str(textList[textList.index(userName) + 3]))
     try:
-        print("Win/Loss Ratio = " + str(int(textList[textList.index(userName) + 1]) / int(textList[textList.index(userName) + 2])))
+        print("Win/Loss Ratio = " + str(round(int(textList[textList.index(userName) + 1]) / int(textList[textList.index(userName) + 2]) , 2)))
         saveFileDoc.close()
     except ZeroDivisionError:
         print("Win/Loss Ratio = " + str(float(textList[textList.index(userName) + 1])) + " (You have never lost a game)")
