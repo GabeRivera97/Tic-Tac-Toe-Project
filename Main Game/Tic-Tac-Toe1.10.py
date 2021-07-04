@@ -89,9 +89,8 @@ def displayLeaderboard():
             afterStats()
     afterStats()
 
-
-
-
+#Function used to set the difficulty for the rest of the play session
+#depending on the players choice
 def changeDifficultySetting():
     global difficulty
     difficultyChoice = str.lower(str.strip(input('\nPlease choose your difficulty (easy/hard): ')))
@@ -104,9 +103,6 @@ def changeDifficultySetting():
     else:
         print('\nThat is not a valid command.')
         changeDifficultySetting()
-        
-
-
 
 #Displays a blank board
 def displayInitialBoard():
@@ -123,7 +119,6 @@ def displayInitialBoard():
         [' ',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ','|',' ',' ',' ',' ',' ']]
     for line in initialBoard:
             print(*line, sep = '')
-
 
 #The main game of Tic Tac Toe
 def main():
