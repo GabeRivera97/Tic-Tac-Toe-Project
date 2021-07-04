@@ -10,7 +10,7 @@ free to give any suggestions on anything that was written amateurishly.
 UPDATE LOG:
 ------
 
-Ver 1.10, Leaderboard Update:
+Ver 1.10, Difficulty Setting Update:
 
 Added the long toiled hard mode. The player will now be asked to choose a difficulty when they first start a game, which will then be stored and implemented by the AI to determine what logical method it will use to make its moves. In hard mode, the AI will: check the board to see if it's about to win and make that move if so, if not it will check if the player is about to win and steal that move, and if no one is about to win it will choose a random spot. The AI will only think one move in advance, as I decided any further strategizing would make such a simple game unwinnable by the player (this feature may be implemented in a "very hard" mode for example).
 
